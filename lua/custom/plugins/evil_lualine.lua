@@ -15,8 +15,11 @@ local conditions = {
   buffer_not_empty = function()
     return vim.fn.empty(vim.fn.expand '%:t') ~= 1
   end,
-  hide_in_width = function()
+  hide_in_width_80 = function()
     return vim.fn.winwidth(0) > 80
+  end,
+  hide_in_width_40 = function()
+    return vim.fn.winwidth(0) > 40
   end,
 }
 
@@ -45,14 +48,6 @@ local evil_mode = {
   padding = { left = 0, right = 2 },
 }
 
-local evil_filename = {
-  'filename',
-  file_status = false,
-  path = 4,
-  color = { gui = 'bold' },
-  cond = conditions.buffer_not_empty,
-}
-
 local evil_lsp = {
   function()
     local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
@@ -70,6 +65,7 @@ local evil_lsp = {
   end,
   color = { gui = 'bold' },
   padding = { left = 2, right = 1 },
+  cond = conditions.hide_in_width_40,
 }
 
 local evil_diagnostics = {
@@ -82,6 +78,7 @@ local evil_diagnostics = {
     hint = { fg = colors.blue, gui = 'bold' },
   },
   symbols = { error = ' ', warn = ' ', info = ' ', hint = ' ' },
+  cond = conditions.hide_in_width_40,
 }
 
 local evil_diff = {
@@ -92,45 +89,75 @@ local evil_diff = {
     removed = { fg = colors.red },
   },
   symbols = { added = ' ', modified = ' ', removed = ' ' },
-  cond = conditions.hide_in_width,
+  cond = conditions.hide_in_width_80,
 }
 
 local evil_branch = {
   'branch',
   icon = '',
   color = { gui = 'bold' },
+  cond = conditions.hide_in_width_40,
 }
 
 local evil_location = {
   'location',
   padding = { left = 2, right = 2 },
-}
-
-local options = {
-  options = {
-    section_separators = '',
-    component_separators = '',
-    theme = evil_theme,
-  },
-  sections = {
-    lualine_a = { evil_mode },
-    lualine_b = { evil_filename },
-    lualine_c = { evil_lsp, evil_diagnostics },
-    lualine_x = { 'searchcount', evil_diff, evil_branch },
-    lualine_y = { evil_location },
-    lualine_z = {},
-  },
-  inactive_sections = {
-    lualine_a = { evil_mode },
-    lualine_b = { evil_filename },
-    lualine_c = {},
-    lualine_x = {},
-    lualine_y = {},
-    lualine_z = {},
-  },
+  cond = conditions.hide_in_width_40,
 }
 
 return {
   'nvim-lualine/lualine.nvim',
-  opts = options,
+  config = function()
+    local evil_filename = require('lualine.components.filename'):extend()
+    local highlight = require 'lualine.highlight'
+
+    function evil_filename:init(options)
+      evil_filename.super.init(self, options)
+      self.status_colors = {
+        saved = highlight.create_component_highlight_group({ gui = 'bold' }, 'filename_status_saved', self.options),
+        modified = highlight.create_component_highlight_group({ fg = colors.yellow, gui = 'bold' }, 'filename_status_modified', self.options),
+        readonly = highlight.create_component_highlight_group({ fg = colors.red, gui = 'bold' }, 'filename_status_modified', self.options),
+      }
+      if self.options.color == nil then
+        self.options.color = ''
+      end
+      self.options.file_status = false
+      self.options.path = 4
+      self.options.cond = conditions.buffer_not_empty and conditions.hide_in_width_40
+    end
+
+    function evil_filename:update_status()
+      local data = evil_filename.super.update_status(self)
+      if vim.bo.readonly == true then
+        data = highlight.component_format_highlight(self.status_colors.readonly) .. data
+      else
+        data = highlight.component_format_highlight(vim.bo.modified and self.status_colors.modified or self.status_colors.saved) .. data
+      end
+      return data
+    end
+
+    require('lualine').setup {
+      options = {
+        section_separators = '',
+        component_separators = '',
+        theme = evil_theme,
+      },
+      sections = {
+        lualine_a = { evil_mode },
+        lualine_b = { evil_filename },
+        lualine_c = { evil_lsp, evil_diagnostics },
+        lualine_x = { 'searchcount', evil_diff, evil_branch },
+        lualine_y = { evil_location },
+        lualine_z = {},
+      },
+      inactive_sections = {
+        lualine_a = { evil_mode },
+        lualine_b = { evil_filename },
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {},
+      },
+    }
+  end,
 }
