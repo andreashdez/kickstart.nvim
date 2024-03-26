@@ -172,6 +172,8 @@ vim.opt.termguicolors = true
 
 vim.opt.termguicolors = true
 
+vim.opt.termguicolors = true
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
