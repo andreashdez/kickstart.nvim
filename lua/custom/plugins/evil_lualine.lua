@@ -43,9 +43,17 @@ local evil_theme = {
 
 local evil_mode = {
   function()
-    return '▋ '
+    -- return '▋ '
+    return '▋'
   end,
-  padding = { left = 0, right = 2 },
+  padding = { left = 0, right = 1 },
+}
+
+local evil_filetype = {
+  'filetype',
+  icon_only = true,
+  icon = { align = 'left' },
+  padding = { left = 1, right = 0 },
 }
 
 local evil_lsp = {
@@ -144,7 +152,7 @@ return {
       },
       sections = {
         lualine_a = { evil_mode },
-        lualine_b = { evil_filename },
+        lualine_b = { evil_filetype, evil_filename },
         lualine_c = { evil_lsp, evil_diagnostics },
         lualine_x = { 'searchcount', evil_diff, evil_branch },
         lualine_y = { evil_location },
