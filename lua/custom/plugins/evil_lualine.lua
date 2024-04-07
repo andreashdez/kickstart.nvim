@@ -43,7 +43,6 @@ local evil_theme = {
 
 local evil_mode = {
   function()
-    -- return '▋ '
     return '▋'
   end,
   padding = { left = 0, right = 1 },
