@@ -579,6 +579,11 @@ require('lazy').setup({
         -- tsserver = {},
         --
 
+        gleam = {
+          cmd = { 'gleam', 'lsp' },
+          filetypes = { 'gleam' },
+        },
+
         rust_analyzer = {
           settings = {
             ['rust-analyzer'] = {
@@ -808,6 +813,29 @@ require('lazy').setup({
         transparent = true,
       }
       vim.cmd.colorscheme 'tokyonight-night'
+
+      vim.cmd.highlight 'GitSignsAdd guifg=#77bb66'
+      vim.cmd.highlight 'GitSignsChange guifg=#525266'
+      vim.cmd.highlight 'GitSignsDelete guifg=#ee5588'
+
+      vim.cmd.highlight 'DiagnosticSignError guifg=#ee5588'
+      vim.cmd.highlight 'DiagnosticSignHint guifg=#66bbff'
+      vim.cmd.highlight 'DiagnosticSignInfo guifg=#525266'
+      vim.cmd.highlight 'DiagnosticSignOk guifg=#77bb66'
+      vim.cmd.highlight 'DiagnosticSignWarn guifg=#ffaa66'
+
+      vim.cmd.highlight 'DiagnosticFloatingError guifg=#ee5588'
+      vim.cmd.highlight 'DiagnosticFloatingHint guifg=#66bbff'
+      vim.cmd.highlight 'DiagnosticFloatingInfo guifg=#525266'
+      vim.cmd.highlight 'DiagnosticFloatingOk guifg=#77bb66'
+      vim.cmd.highlight 'DiagnosticFloatingWarn guifg=#ffaa66'
+
+      vim.cmd.highlight 'DiagnosticVirtualTextError guifg=#ee5588 guibg=none'
+      vim.cmd.highlight 'DiagnosticVirtualTextHint guifg=#66bbff guibg=none'
+      vim.cmd.highlight 'DiagnosticVirtualTextInfo guifg=#525266 guibg=none'
+      vim.cmd.highlight 'DiagnosticVirtualTextOk guifg=#77bb66 guibg=none'
+      vim.cmd.highlight 'DiagnosticVirtualTextWarn guifg=#ffaa66 guibg=none'
+
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
