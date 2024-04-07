@@ -615,6 +615,11 @@ require('lazy').setup({
         -- tsserver = {},
         --
 
+        gleam = {
+          cmd = { 'gleam', 'lsp' },
+          filetypes = { 'gleam' },
+        },
+
         rust_analyzer = {
           settings = {
             ['rust-analyzer'] = {
