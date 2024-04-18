@@ -615,24 +615,11 @@ require('lazy').setup({
         -- tsserver = {},
         --
 
-        gleam = {
-          cmd = { 'gleam', 'lsp' },
-          filetypes = { 'gleam' },
-        },
-
-        rust_analyzer = {
-          settings = {
-            ['rust-analyzer'] = {
-              procMacro = {
-                ignored = {
-                  leptos_macro = {
-                    'server',
-                  },
-                },
-              },
-            },
-          },
-        },
+        bashls = {},
+        cssls = {},
+        jsonls = {},
+        shellcheck = {},
+        shfmt = {},
 
         lua_ls = {
           -- cmd = {...},
@@ -969,6 +956,28 @@ require('lazy').setup({
     },
   },
 })
+
+local lspconfig = require 'lspconfig'
+lspconfig.gleam.setup {}
+lspconfig.gopls.setup {}
+lspconfig.marksman.setup {}
+lspconfig.rust_analyzer.setup {
+  settings = {
+    ['rust-analyzer'] = {
+      procMacro = {
+        ignored = {
+          leptos_macro = {
+            'server',
+          },
+        },
+      },
+    },
+  },
+}
+lspconfig.pyright.setup {}
+lspconfig.taplo.setup {}
+lspconfig.tsserver.setup {}
+lspconfig.zls.setup {}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
