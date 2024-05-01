@@ -1,14 +1,14 @@
 -- stylua: ignore
 local colors = {
-  bg       = '#181c2a',
-  fg       = '#cccccc',
-  blue     = '#66bbff',
-  cyan     = '#66ddff',
-  green    = '#77bb66',
-  grey     = '#525266',
-  magenta  = '#cc99ff',
-  red      = '#ee5588',
-  yellow   = '#ffaa66',
+  bg       = '#181825', -- mantle
+  fg       = '#cdd6f4', -- text
+  blue     = '#89b4fa', -- blue
+  cyan     = '#89dceb', -- sky
+  green    = '#a6e3a1', -- green
+  grey     = '#585b70', -- surface 2
+  magenta  = '#f5c2e7', -- pink
+  red      = '#f38ba8', -- red
+  yellow   = '#f9e2af', -- yellow
 }
 
 local conditions = {
