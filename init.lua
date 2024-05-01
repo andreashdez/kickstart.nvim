@@ -785,46 +785,37 @@ require('lazy').setup({
     end,
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
+  {
+    'catppuccin/nvim',
+    priority = 1000,
+    name = 'catppuccin',
     init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      require('tokyonight').setup {
-        transparent = true,
+      require('catppuccin').setup {
+        transparent_background = true,
       }
-      vim.cmd.colorscheme 'tokyonight-night'
+      vim.cmd.colorscheme 'catppuccin-mocha'
 
-      vim.cmd.highlight 'GitSignsAdd guifg=#77bb66'
-      vim.cmd.highlight 'GitSignsChange guifg=#525266'
-      vim.cmd.highlight 'GitSignsDelete guifg=#ee5588'
-
-      vim.cmd.highlight 'DiagnosticSignError guifg=#ee5588'
-      vim.cmd.highlight 'DiagnosticSignHint guifg=#66bbff'
-      vim.cmd.highlight 'DiagnosticSignInfo guifg=#525266'
-      vim.cmd.highlight 'DiagnosticSignOk guifg=#77bb66'
-      vim.cmd.highlight 'DiagnosticSignWarn guifg=#ffaa66'
-
-      vim.cmd.highlight 'DiagnosticFloatingError guifg=#ee5588'
-      vim.cmd.highlight 'DiagnosticFloatingHint guifg=#66bbff'
-      vim.cmd.highlight 'DiagnosticFloatingInfo guifg=#525266'
-      vim.cmd.highlight 'DiagnosticFloatingOk guifg=#77bb66'
-      vim.cmd.highlight 'DiagnosticFloatingWarn guifg=#ffaa66'
-
-      vim.cmd.highlight 'DiagnosticVirtualTextError guifg=#ee5588 guibg=none'
-      vim.cmd.highlight 'DiagnosticVirtualTextHint guifg=#66bbff guibg=none'
-      vim.cmd.highlight 'DiagnosticVirtualTextInfo guifg=#525266 guibg=none'
-      vim.cmd.highlight 'DiagnosticVirtualTextOk guifg=#77bb66 guibg=none'
-      vim.cmd.highlight 'DiagnosticVirtualTextWarn guifg=#ffaa66 guibg=none'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
+      -- vim.cmd.highlight 'GitSignsAdd guifg=#77bb66'
+      -- vim.cmd.highlight 'GitSignsChange guifg=#525266'
+      -- vim.cmd.highlight 'GitSignsDelete guifg=#ee5588'
+      --
+      -- vim.cmd.highlight 'DiagnosticSignError guifg=#ee5588'
+      -- vim.cmd.highlight 'DiagnosticSignHint guifg=#66bbff'
+      -- vim.cmd.highlight 'DiagnosticSignInfo guifg=#525266'
+      -- vim.cmd.highlight 'DiagnosticSignOk guifg=#77bb66'
+      -- vim.cmd.highlight 'DiagnosticSignWarn guifg=#ffaa66'
+      --
+      -- vim.cmd.highlight 'DiagnosticFloatingError guifg=#ee5588'
+      -- vim.cmd.highlight 'DiagnosticFloatingHint guifg=#66bbff'
+      -- vim.cmd.highlight 'DiagnosticFloatingInfo guifg=#525266'
+      -- vim.cmd.highlight 'DiagnosticFloatingOk guifg=#77bb66'
+      -- vim.cmd.highlight 'DiagnosticFloatingWarn guifg=#ffaa66'
+      --
+      -- vim.cmd.highlight 'DiagnosticVirtualTextError guifg=#ee5588 guibg=none'
+      -- vim.cmd.highlight 'DiagnosticVirtualTextHint guifg=#66bbff guibg=none'
+      -- vim.cmd.highlight 'DiagnosticVirtualTextInfo guifg=#525266 guibg=none'
+      -- vim.cmd.highlight 'DiagnosticVirtualTextOk guifg=#77bb66 guibg=none'
+      -- vim.cmd.highlight 'DiagnosticVirtualTextWarn guifg=#ffaa66 guibg=none'
     end,
   },
 
@@ -960,7 +951,9 @@ lspconfig.rust_analyzer.setup {
     },
   },
 }
-lspconfig.pyright.setup {}
+-- lspconfig.pyright.setup {}
+lspconfig.ruff.setup {}
+lspconfig.ruff_lsp.setup {}
 lspconfig.taplo.setup {}
 lspconfig.tsserver.setup {}
 lspconfig.zls.setup {}
