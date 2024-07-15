@@ -952,7 +952,6 @@ lspconfig.rust_analyzer.setup {
 }
 -- lspconfig.pyright.setup {}
 lspconfig.ruff.setup {}
-lspconfig.ruff_lsp.setup {}
 lspconfig.taplo.setup {}
 lspconfig.tsserver.setup {}
 lspconfig.zls.setup {}
