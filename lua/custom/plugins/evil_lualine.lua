@@ -1,6 +1,7 @@
 -- stylua: ignore
 local colors = {
-  bg       = '#181825', -- mantle
+  -- bg       = '#181825', -- mantle
+  bg       = '#1e1e2e', -- base
   fg       = '#cdd6f4', -- text
   blue     = '#89b4fa', -- blue
   cyan     = '#89dceb', -- sky
