@@ -1069,7 +1069,7 @@ lspconfig.rust_analyzer.setup {
 }
 lspconfig.pyright.setup {}
 lspconfig.taplo.setup {}
-lspconfig.tsserver.setup {}
+lspconfig.ts_ls.setup {}
 lspconfig.zls.setup {}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
