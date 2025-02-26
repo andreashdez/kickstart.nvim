@@ -1064,6 +1064,7 @@ lspconfig.rust_analyzer.setup {
 }
 lspconfig.pyright.setup {}
 lspconfig.taplo.setup {}
+lspconfig.tinymist.setup {}
 lspconfig.ts_ls.setup {}
 lspconfig.zls.setup {}
 
