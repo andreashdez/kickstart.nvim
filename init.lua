@@ -908,6 +908,9 @@ require('lazy').setup({
       -- vim.cmd.highlight 'DiagnosticVirtualTextInfo guifg=#525266 guibg=none'
       -- vim.cmd.highlight 'DiagnosticVirtualTextOk guifg=#77bb66 guibg=none'
       -- vim.cmd.highlight 'DiagnosticVirtualTextWarn guifg=#ffaa66 guibg=none'
+      vim.cmd.highlight 'CursorLine guibg=#313244'
+      vim.cmd.highlight 'CursorLineNR guibg=#313244'
+      vim.cmd.highlight 'CursorLineSign guibg=#313244'
     end,
   },
 
