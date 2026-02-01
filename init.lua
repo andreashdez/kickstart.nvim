@@ -367,6 +367,7 @@ require('lazy').setup({
       -- Mason must be loaded before its dependents so we need to set it up here.
       -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
       { 'mason-org/mason.nvim', opts = {} },
+      { 'mason-org/mason-lspconfig.nvim', opts = {} },
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
@@ -764,13 +765,19 @@ require('lazy').setup({
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    lazy = false,
+    build = ':TSUpdate',
     config = function()
-      local filetypes = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
-      require('nvim-treesitter').install(filetypes)
-      vim.api.nvim_create_autocmd('FileType', {
-        pattern = filetypes,
-        callback = function() vim.treesitter.start() end,
-      })
+      require('nvim-treesitter.configs').setup {
+        ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+        auto_install = true,
+        highlight = {
+          enable = true,
+        },
+        indent = {
+          enable = true,
+        },
+      }
     end,
   },
 
@@ -821,30 +828,6 @@ require('lazy').setup({
     },
   },
 })
-
-local lspconfig = require 'lspconfig'
-lspconfig.gleam.setup {}
-lspconfig.gopls.setup {}
-lspconfig.marksman.setup {}
-lspconfig.rust_analyzer.setup {
-  settings = {
-    ['rust-analyzer'] = {
-      procMacro = {
-        ignored = {
-          leptos_macro = {
-            'server',
-          },
-        },
-      },
-    },
-  },
-}
--- lspconfig.pyright.setup {}
-lspconfig.ruff.setup {}
-lspconfig.taplo.setup {}
-lspconfig.tinymist.setup {}
-lspconfig.ts_ls.setup {}
-lspconfig.zls.setup {}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
