@@ -822,5 +822,53 @@ require('lazy').setup({
   },
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'gleam',
+  callback = function() vim.lsp.start(vim.lsp.config['gleam']) end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'go',
+  callback = function() vim.lsp.start(vim.lsp.config['gopls']) end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'markdown',
+  callback = function() vim.lsp.start(vim.lsp.config['marksman']) end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'rust',
+  callback = function() vim.lsp.start(vim.lsp.config['rust_analyzer']) end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'python',
+  callback = function()
+    vim.lsp.start(vim.lsp.config['ruff'])
+    -- vim.lsp.start(vim.lsp.config['pyright'])
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'toml',
+  callback = function() vim.lsp.start(vim.lsp.config['taplo']) end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'typst',
+  callback = function() vim.lsp.start(vim.lsp.config['tinymist']) end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'yaml',
+  callback = function() vim.lsp.start(vim.lsp.config['yamlls']) end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'zig',
+  callback = function() vim.lsp.start(vim.lsp.config['zls']) end,
+})
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
