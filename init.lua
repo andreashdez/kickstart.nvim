@@ -92,10 +92,33 @@ vim.diagnostic.config {
   severity_sort = true,
   float = { border = 'rounded', source = 'if_many' },
   underline = { severity = vim.diagnostic.severity.ERROR },
+  signs = vim.g.have_nerd_font and {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '󰅚 ',
+      [vim.diagnostic.severity.WARN] = '󰀪 ',
+      [vim.diagnostic.severity.INFO] = '󰋽 ',
+      [vim.diagnostic.severity.HINT] = '󰌶 ',
+    },
+  } or {},
 
   -- Can switch between these as you prefer
-  virtual_text = true, -- Text shows up at the end of the line
-  virtual_lines = false, -- Teest shows up underneath the line, with virtual lines
+  virtual_text = false, -- Text shows up at the end of the line
+  -- virtual_lines = false, -- Teest shows up underneath the line, with virtual lines
+
+  virtual_lines = {
+    current_line = true,
+    source = 'if_many',
+    spacing = 2,
+    format = function(diagnostic)
+      local diagnostic_message = {
+        [vim.diagnostic.severity.ERROR] = diagnostic.message,
+        [vim.diagnostic.severity.WARN] = diagnostic.message,
+        [vim.diagnostic.severity.INFO] = diagnostic.message,
+        [vim.diagnostic.severity.HINT] = diagnostic.message,
+      }
+      return diagnostic_message[diagnostic.severity]
+    end,
+  },
 
   -- Auto open the float, so you can easily read the errors when jumping with `[d` and `]d`
   jump = { float = true },
@@ -469,36 +492,6 @@ require('lazy').setup({
           end
         end,
       })
-
-      -- Diagnostic Config
-      -- See :help vim.diagnostic.Opts
-      -- vim.diagnostic.config {
-      --   severity_sort = true,
-      --   float = { border = 'rounded', source = 'if_many' },
-      --   underline = { severity = vim.diagnostic.severity.ERROR },
-      --   signs = vim.g.have_nerd_font and {
-      --     text = {
-      --       [vim.diagnostic.severity.ERROR] = '󰅚 ',
-      --       [vim.diagnostic.severity.WARN] = '󰀪 ',
-      --       [vim.diagnostic.severity.INFO] = '󰋽 ',
-      --       [vim.diagnostic.severity.HINT] = '󰌶 ',
-      --     },
-      --   } or {},
-      --   virtual_lines = {
-      --     current_line = true,
-      --     source = 'if_many',
-      --     spacing = 2,
-      --     format = function(diagnostic)
-      --       local diagnostic_message = {
-      --         [vim.diagnostic.severity.ERROR] = diagnostic.message,
-      --         [vim.diagnostic.severity.WARN] = diagnostic.message,
-      --         [vim.diagnostic.severity.INFO] = diagnostic.message,
-      --         [vim.diagnostic.severity.HINT] = diagnostic.message,
-      --       }
-      --       return diagnostic_message[diagnostic.severity]
-      --     end,
-      --   },
-      -- }
 
       -- LSP servers and clients are able to communicate to each other what features they support.
       --  By default, Neovim doesn't support everything that is in the LSP specification.
