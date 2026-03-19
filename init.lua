@@ -103,7 +103,7 @@ vim.diagnostic.config {
 
   -- Can switch between these as you prefer
   virtual_text = false, -- Text shows up at the end of the line
-  virtual_lines = {     -- Text shows up underneath the line, with virtual lines
+  virtual_lines = { -- Text shows up underneath the line, with virtual lines
     current_line = true,
     source = 'if_many',
     spacing = 2,
@@ -778,8 +778,17 @@ require('lazy').setup({
     branch = 'main',
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
-      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
-      require('nvim-treesitter').install(parsers)
+      -- local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      require('nvim-treesitter').install 'all'
+
+      -- enables treesitter based folds
+      -- for more info on folds see `:help folds`
+      vim.opt.foldmethod = 'expr'
+      vim.opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+      vim.opt.foldlevel = 99
+      vim.opt.foldlevelstart = 99
+      vim.opt.foldenable = true
+
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
           local buf, filetype = args.buf, args.match
