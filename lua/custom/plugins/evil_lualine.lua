@@ -58,17 +58,20 @@ local evil_filetype = {
 
 local evil_lsp = {
   function()
-    local buf_ft = vim.api.nvim_get_option_value('filetype', {})
-    local clients = vim.lsp.get_clients()
-    if next(clients) == nil then
+    local bufnr = vim.api.nvim_get_current_buf()
+    local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
+    local clients = vim.lsp.get_clients { bufnr = bufnr }
+    if #clients == 0 then
       return ''
     end
+
     for _, client in ipairs(clients) do
       local filetypes = client.config.filetypes
-      if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+      if filetypes == nil or vim.tbl_contains(filetypes, buf_ft) then
         return '[' .. client.name .. ']'
       end
     end
+
     return ''
   end,
   color = { gui = 'bold' },
@@ -131,7 +134,9 @@ return {
       end
       self.options.file_status = false
       self.options.path = 4
-      self.options.cond = conditions.buffer_not_empty and conditions.hide_in_width_40
+      self.options.cond = function()
+        return conditions.buffer_not_empty() and conditions.hide_in_width_40()
+      end
     end
 
     function evil_filename:update_status()
