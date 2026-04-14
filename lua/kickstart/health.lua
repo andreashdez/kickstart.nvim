@@ -114,7 +114,6 @@ local check_external_reqs = function()
     { exe = 'gleam', description = 'Gleam LSP runner (gleam lsp)' },
     { exe = 'gopls', description = 'Go LSP (gopls)' },
     { exe = 'marksman', description = 'Markdown LSP (marksman)' },
-    { exe = 'pyright-langserver', description = 'Python LSP (pyright)' },
     { exe = 'ruff', description = 'Python LSP (ruff)' },
     { exe = 'rust-analyzer', description = 'Rust LSP (rust_analyzer)' },
     { exe = 'taplo', description = 'TOML LSP (taplo)' },
