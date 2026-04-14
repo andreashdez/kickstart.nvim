@@ -431,10 +431,13 @@ require('lazy').setup({
 
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'goimports', -- Go formatter/import organizer (conform)
         'golangci-lint', -- Go linter (nvim-lint)
+        'prettierd', -- Markdown/YAML formatter (conform)
+        'shfmt', -- Shell formatter (conform)
         'markdownlint-cli2', -- Markdown linter (nvim-lint)
-        -- 'selene', -- Lua linter (nvim-lint)
         'shellcheck', -- Shell linter (nvim-lint)
+        'yamlfmt', -- YAML formatter (conform)
         'yamllint', -- YAML linter (nvim-lint)
       })
 
@@ -479,11 +482,15 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
+        go = { 'goimports', 'gofmt' },
+        rust = { 'rustfmt' },
+        sh = { 'shfmt' },
+        bash = { 'shfmt' },
+        zsh = { 'shfmt' },
+        markdown = { 'prettierd', 'prettier', stop_after_first = true },
+        yaml = { 'yamlfmt', 'prettierd', 'prettier', stop_after_first = true },
+        toml = { 'taplo' },
+        zig = { 'zigfmt' },
       },
     },
   },

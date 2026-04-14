@@ -110,7 +110,6 @@ local check_external_reqs = function()
   for _, tool in ipairs {
     { exe = 'stylua', description = 'Lua formatter (conform)' },
     { exe = 'markdownlint-cli2', description = 'Markdown linter (nvim-lint)' },
-    { exe = 'selene', description = 'Lua linter (nvim-lint)' },
     { exe = 'shellcheck', description = 'Shell linter (nvim-lint)' },
     { exe = 'yamllint', description = 'YAML linter (nvim-lint)' },
     { exe = 'golangci-lint', description = 'Go linter (nvim-lint, save only)' },
