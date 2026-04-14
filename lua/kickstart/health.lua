@@ -5,6 +5,66 @@
 --
 --]]
 
+local uv = vim.uv or vim.loop
+
+---@param exe string
+---@return string|nil resolved_path
+---@return string|nil path
+---@return string|nil err
+local resolve_executable = function(exe)
+  local path = vim.fn.exepath(exe)
+  if path == nil or path == '' then return nil end
+
+  local resolved_path = uv.fs_realpath and uv.fs_realpath(path) or path
+  if not resolved_path then return nil, path, 'broken' end
+
+  return resolved_path, path
+end
+
+---@param exe string
+---@param description string
+---@return boolean
+local check_executable = function(exe, description)
+  local resolved_path, path, err = resolve_executable(exe)
+  if resolved_path then
+    vim.health.ok(string.format("Found %s executable: '%s' (%s)", description, exe, path))
+    return true
+  end
+
+  if err == 'broken' then
+    vim.health.warn(string.format("Found %s executable, but it is a broken link: '%s'", description, path))
+    return false
+  end
+
+  vim.health.warn(string.format("Could not find %s executable: '%s'", description, exe))
+  return false
+end
+
+---@param candidates string[]
+---@param description string
+---@return boolean
+local check_any_executable = function(candidates, description)
+  local broken_path = nil
+
+  for _, exe in ipairs(candidates) do
+    local resolved_path, path, err = resolve_executable(exe)
+    if resolved_path then
+      vim.health.ok(string.format("Found %s executable: '%s' (%s)", description, exe, path))
+      return true
+    end
+
+    if err == 'broken' then broken_path = path end
+  end
+
+  if broken_path then
+    vim.health.warn(string.format("Found %s executable, but it is a broken link: '%s'", description, broken_path))
+    return false
+  end
+
+  vim.health.warn(string.format('Could not find %s executable. Tried: %s', description, table.concat(candidates, ', ')))
+  return false
+end
+
 local check_version = function()
   local verstr = tostring(vim.version())
   if not vim.version.ge then
@@ -20,14 +80,49 @@ local check_version = function()
 end
 
 local check_external_reqs = function()
-  -- Basic utils: `git`, `make`, `unzip`
-  for _, exe in ipairs { 'git', 'make', 'unzip', 'rg' } do
-    local is_executable = vim.fn.executable(exe) == 1
-    if is_executable then
-      vim.health.ok(string.format("Found executable: '%s'", exe))
-    else
-      vim.health.warn(string.format("Could not find executable: '%s'", exe))
-    end
+  vim.health.start 'External dependencies'
+
+  for _, tool in ipairs {
+    { exe = 'git', description = 'git' },
+    { exe = 'make', description = 'make' },
+    { exe = 'unzip', description = 'unzip' },
+    { exe = 'rg', description = 'ripgrep' },
+    { exe = 'tree-sitter', description = 'tree-sitter CLI' },
+    { exe = 'node', description = 'Node.js runtime' },
+  } do
+    check_executable(tool.exe, tool.description)
+  end
+
+  check_any_executable({ 'fd', 'fdfind' }, 'fd')
+  check_any_executable({ 'cc', 'gcc', 'clang' }, 'C compiler')
+
+  if vim.fn.has 'mac' == 1 then
+    check_any_executable({ 'pbcopy' }, 'clipboard provider')
+  elseif vim.fn.has 'win32' == 1 then
+    check_any_executable({ 'win32yank', 'clip' }, 'clipboard provider')
+  else
+    check_any_executable({ 'wl-copy', 'xclip', 'xsel' }, 'clipboard provider')
+  end
+
+  vim.health.start 'Configured tools'
+  vim.health.info 'These checks mirror language tools configured in this fork.'
+
+  for _, tool in ipairs {
+    { exe = 'stylua', description = 'Lua formatter (conform)' },
+    { exe = 'markdownlint', description = 'Markdown linter (nvim-lint)' },
+    { exe = 'lua-language-server', description = 'Lua LSP (lua_ls)' },
+    { exe = 'gleam', description = 'Gleam LSP runner (gleam lsp)' },
+    { exe = 'gopls', description = 'Go LSP (gopls)' },
+    { exe = 'marksman', description = 'Markdown LSP (marksman)' },
+    { exe = 'pyright-langserver', description = 'Python LSP (pyright)' },
+    { exe = 'ruff', description = 'Python LSP (ruff)' },
+    { exe = 'rust-analyzer', description = 'Rust LSP (rust_analyzer)' },
+    { exe = 'taplo', description = 'TOML LSP (taplo)' },
+    { exe = 'tinymist', description = 'Typst LSP (tinymist)' },
+    { exe = 'yaml-language-server', description = 'YAML LSP (yamlls)' },
+    { exe = 'zls', description = 'Zig LSP (zls)' },
+  } do
+    check_executable(tool.exe, tool.description)
   end
 
   return true
@@ -43,7 +138,6 @@ return {
     Mason will give warnings for languages that are not installed.
     You do not need to install, unless you want to use those languages!]]
 
-    local uv = vim.uv or vim.loop
     vim.health.info('System Information: ' .. vim.inspect(uv.os_uname()))
 
     check_version()
