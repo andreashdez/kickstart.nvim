@@ -563,7 +563,13 @@ require('lazy').setup({
       --    :Mason
       --
       -- You can press `g?` for help in this menu.
-      local ensure_installed = vim.tbl_keys(servers or {})
+      local mason_unsupported = {
+        -- Gleam's language server comes from the `gleam` binary, not Mason.
+        gleam = true,
+      }
+
+      local ensure_installed = vim.tbl_filter(function(server) return not mason_unsupported[server] end, vim.tbl_keys(servers or {}))
+
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
         -- You can add other tools here that you want Mason to install
@@ -847,6 +853,7 @@ require('lazy').setup({
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.debug',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
