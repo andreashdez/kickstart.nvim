@@ -7,9 +7,35 @@ return {
   event = { 'BufReadPre', 'BufNewFile' },
   config = function()
     local lint = require 'lint'
-    lint.linters_by_ft = {
-      markdown = { 'markdownlint' }, -- Make sure to install `markdownlint` via mason / npm
+    local heavy_linters = {
+      golangcilint = true,
+      clippy = true,
+      zlint = true,
     }
+
+    lint.linters_by_ft = {
+      markdown = { 'markdownlint-cli2' },
+      yaml = { 'yamllint' },
+      sh = { 'shellcheck' },
+      bash = { 'shellcheck' },
+      zsh = { 'shellcheck' },
+
+      go = { 'golangcilint' },
+      rust = { 'clippy' },
+      zig = { 'zlint' },
+    }
+
+    local get_light_linters = function(filetype)
+      local configured = lint.linters_by_ft[filetype]
+      if type(configured) ~= 'table' then return {} end
+
+      local light_linters = {}
+      for _, linter in ipairs(configured) do
+        if type(linter) == 'string' and not heavy_linters[linter] then table.insert(light_linters, linter) end
+      end
+
+      return light_linters
+    end
 
     -- To allow other plugins to add linters to require('lint').linters_by_ft,
     -- instead set linters_by_ft like this:
@@ -43,16 +69,23 @@ return {
     -- lint.linters_by_ft['terraform'] = nil
     -- lint.linters_by_ft['text'] = nil
 
-    -- Create autocommand which carries out the actual linting
-    -- on the specified events.
+    -- Run lightweight linters while editing, and heavy linters on save.
     local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
     vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
       group = lint_augroup,
-      callback = function()
+      callback = function(args)
         -- Only run the linter in buffers that you can modify in order to
         -- avoid superfluous noise, notably within the handy LSP pop-ups that
         -- describe the hovered symbol using Markdown.
-        if vim.bo.modifiable then lint.try_lint() end
+        if not vim.bo.modifiable then return end
+
+        if args.event == 'BufWritePost' then
+          lint.try_lint()
+          return
+        end
+
+        local light_linters = get_light_linters(vim.bo.filetype)
+        if #light_linters > 0 then lint.try_lint(light_linters) end
       end,
     })
   end,

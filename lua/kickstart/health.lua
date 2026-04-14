@@ -109,7 +109,14 @@ local check_external_reqs = function()
 
   for _, tool in ipairs {
     { exe = 'stylua', description = 'Lua formatter (conform)' },
-    { exe = 'markdownlint', description = 'Markdown linter (nvim-lint)' },
+    { exe = 'markdownlint-cli2', description = 'Markdown linter (nvim-lint)' },
+    { exe = 'selene', description = 'Lua linter (nvim-lint)' },
+    { exe = 'shellcheck', description = 'Shell linter (nvim-lint)' },
+    { exe = 'yamllint', description = 'YAML linter (nvim-lint)' },
+    { exe = 'golangci-lint', description = 'Go linter (nvim-lint, save only)' },
+    { exe = 'cargo', description = 'Rust linter runner (nvim-lint, save only)' },
+    { exe = 'clippy-driver', description = 'Rust linter backend (nvim-lint, save only)' },
+    { exe = 'zlint', description = 'Zig linter (nvim-lint, save only)' },
     { exe = 'lua-language-server', description = 'Lua LSP (lua_ls)' },
     { exe = 'gleam', description = 'Gleam LSP runner (gleam lsp)' },
     { exe = 'gopls', description = 'Go LSP (gopls)' },

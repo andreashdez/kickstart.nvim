@@ -431,6 +431,11 @@ require('lazy').setup({
 
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'golangci-lint', -- Go linter (nvim-lint)
+        'markdownlint-cli2', -- Markdown linter (nvim-lint)
+        -- 'selene', -- Lua linter (nvim-lint)
+        'shellcheck', -- Shell linter (nvim-lint)
+        'yamllint', -- YAML linter (nvim-lint)
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
