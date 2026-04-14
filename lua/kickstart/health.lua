@@ -109,6 +109,12 @@ local check_external_reqs = function()
 
   for _, tool in ipairs {
     { exe = 'stylua', description = 'Lua formatter (conform)' },
+    { exe = 'goimports', description = 'Go import formatter (conform)' },
+    { exe = 'gofmt', description = 'Go formatter (conform)' },
+    { exe = 'rustfmt', description = 'Rust formatter (conform)' },
+    { exe = 'shfmt', description = 'Shell formatter (conform)' },
+    { exe = 'taplo', description = 'TOML formatter/LSP (conform/lsp)' },
+    { exe = 'zig', description = 'Zig formatter runner (conform zig fmt)' },
     { exe = 'markdownlint-cli2', description = 'Markdown linter (nvim-lint)' },
     { exe = 'shellcheck', description = 'Shell linter (nvim-lint)' },
     { exe = 'yamllint', description = 'YAML linter (nvim-lint)' },
@@ -122,13 +128,15 @@ local check_external_reqs = function()
     { exe = 'marksman', description = 'Markdown LSP (marksman)' },
     { exe = 'ruff', description = 'Python LSP (ruff)' },
     { exe = 'rust-analyzer', description = 'Rust LSP (rust_analyzer)' },
-    { exe = 'taplo', description = 'TOML LSP (taplo)' },
     { exe = 'tinymist', description = 'Typst LSP (tinymist)' },
     { exe = 'yaml-language-server', description = 'YAML LSP (yamlls)' },
     { exe = 'zls', description = 'Zig LSP (zls)' },
   } do
     check_executable(tool.exe, tool.description)
   end
+
+  check_any_executable({ 'prettierd', 'prettier' }, 'Markdown formatter (conform)')
+  check_any_executable({ 'yamlfmt', 'prettierd', 'prettier' }, 'YAML formatter (conform)')
 
   return true
 end
