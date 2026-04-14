@@ -127,7 +127,7 @@ return {
       self.status_colors = {
         saved = highlight.create_component_highlight_group({ gui = 'bold' }, 'filename_status_saved', self.options),
         modified = highlight.create_component_highlight_group({ fg = colors.yellow, gui = 'bold' }, 'filename_status_modified', self.options),
-        readonly = highlight.create_component_highlight_group({ fg = colors.red, gui = 'bold' }, 'filename_status_modified', self.options),
+        readonly = highlight.create_component_highlight_group({ fg = colors.red, gui = 'bold' }, 'filename_status_readonly', self.options),
       }
       if self.options.color == nil then
         self.options.color = ''
