@@ -388,7 +388,12 @@ require('lazy').setup({
         ruff = {},
         rust_analyzer = {},
         taplo = {},
-        tinymist = {},
+        tinymist = {
+          settings = {
+            exportPdf = 'onType',
+            outputPath = '$root/target/$dir/$name',
+          },
+        },
         yamlls = {},
         zls = {},
 
