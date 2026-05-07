@@ -1,27 +1,22 @@
--- stylua: ignore
+vim.pack.add { 'https://github.com/nvim-lualine/lualine.nvim' }
+
 local colors = {
   -- bg       = '#181825', -- mantle
-  bg       = '#1e1e2e', -- base
-  fg       = '#cdd6f4', -- text
-  blue     = '#89b4fa', -- blue
-  cyan     = '#89dceb', -- sky
-  green    = '#a6e3a1', -- green
-  grey     = '#585b70', -- surface 2
-  magenta  = '#f5c2e7', -- pink
-  red      = '#f38ba8', -- red
-  yellow   = '#f9e2af', -- yellow
+  bg = '#1e1e2e', -- base
+  fg = '#cdd6f4', -- text
+  blue = '#89b4fa', -- blue
+  cyan = '#89dceb', -- sky
+  green = '#a6e3a1', -- green
+  grey = '#585b70', -- surface 2
+  magenta = '#f5c2e7', -- pink
+  red = '#f38ba8', -- red
+  yellow = '#f9e2af', -- yellow
 }
 
 local conditions = {
-  buffer_not_empty = function()
-    return vim.fn.empty(vim.fn.expand '%:t') ~= 1
-  end,
-  hide_in_width_80 = function()
-    return vim.fn.winwidth(0) > 80
-  end,
-  hide_in_width_40 = function()
-    return vim.fn.winwidth(0) > 40
-  end,
+  buffer_not_empty = function() return vim.fn.empty(vim.fn.expand '%:t') ~= 1 end,
+  hide_in_width_80 = function() return vim.fn.winwidth(0) > 80 end,
+  hide_in_width_40 = function() return vim.fn.winwidth(0) > 40 end,
 }
 
 local evil_theme = {
@@ -43,9 +38,7 @@ local evil_theme = {
 }
 
 local evil_mode = {
-  function()
-    return '▋'
-  end,
+  function() return '▋' end,
   padding = { left = 0, right = 1 },
 }
 
@@ -61,15 +54,11 @@ local evil_lsp = {
     local bufnr = vim.api.nvim_get_current_buf()
     local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = bufnr })
     local clients = vim.lsp.get_clients { bufnr = bufnr }
-    if #clients == 0 then
-      return ''
-    end
+    if #clients == 0 then return '' end
 
     for _, client in ipairs(clients) do
       local filetypes = client.config.filetypes
-      if filetypes == nil or vim.tbl_contains(filetypes, buf_ft) then
-        return '[' .. client.name .. ']'
-      end
+      if filetypes == nil or vim.tbl_contains(filetypes, buf_ft) then return '[' .. client.name .. ']' end
     end
 
     return ''
@@ -116,61 +105,52 @@ local evil_location = {
   cond = conditions.hide_in_width_40,
 }
 
-return {
-  'nvim-lualine/lualine.nvim',
-  config = function()
-    local evil_filename = require('lualine.components.filename'):extend()
-    local highlight = require 'lualine.highlight'
+local evil_filename = require('lualine.components.filename'):extend()
+local highlight = require 'lualine.highlight'
 
-    function evil_filename:init(options)
-      evil_filename.super.init(self, options)
-      self.status_colors = {
-        saved = highlight.create_component_highlight_group({ gui = 'bold' }, 'filename_status_saved', self.options),
-        modified = highlight.create_component_highlight_group({ fg = colors.yellow, gui = 'bold' }, 'filename_status_modified', self.options),
-        readonly = highlight.create_component_highlight_group({ fg = colors.red, gui = 'bold' }, 'filename_status_readonly', self.options),
-      }
-      if self.options.color == nil then
-        self.options.color = ''
-      end
-      self.options.file_status = false
-      self.options.path = 4
-      self.options.cond = function()
-        return conditions.buffer_not_empty() and conditions.hide_in_width_40()
-      end
-    end
+function evil_filename:init(options)
+  evil_filename.super.init(self, options)
+  self.status_colors = {
+    saved = highlight.create_component_highlight_group({ gui = 'bold' }, 'filename_status_saved', self.options),
+    modified = highlight.create_component_highlight_group({ fg = colors.yellow, gui = 'bold' }, 'filename_status_modified', self.options),
+    readonly = highlight.create_component_highlight_group({ fg = colors.red, gui = 'bold' }, 'filename_status_readonly', self.options),
+  }
+  if self.options.color == nil then self.options.color = '' end
+  self.options.file_status = false
+  self.options.path = 4
+  self.options.cond = function() return conditions.buffer_not_empty() and conditions.hide_in_width_40() end
+end
 
-    function evil_filename:update_status()
-      local data = evil_filename.super.update_status(self)
-      if vim.bo.readonly == true then
-        data = highlight.component_format_highlight(self.status_colors.readonly) .. data
-      else
-        data = highlight.component_format_highlight(vim.bo.modified and self.status_colors.modified or self.status_colors.saved) .. data
-      end
-      return data
-    end
+function evil_filename:update_status()
+  local data = evil_filename.super.update_status(self)
+  if vim.bo.readonly == true then
+    data = highlight.component_format_highlight(self.status_colors.readonly) .. data
+  else
+    data = highlight.component_format_highlight(vim.bo.modified and self.status_colors.modified or self.status_colors.saved) .. data
+  end
+  return data
+end
 
-    require('lualine').setup {
-      options = {
-        section_separators = '',
-        component_separators = '',
-        theme = evil_theme,
-      },
-      sections = {
-        lualine_a = { evil_mode },
-        lualine_b = { evil_filetype, evil_filename },
-        lualine_c = { evil_lsp, evil_diagnostics },
-        lualine_x = { 'searchcount', evil_diff, evil_branch },
-        lualine_y = { evil_location },
-        lualine_z = {},
-      },
-      inactive_sections = {
-        lualine_a = { evil_mode },
-        lualine_b = { evil_filename },
-        lualine_c = {},
-        lualine_x = {},
-        lualine_y = {},
-        lualine_z = {},
-      },
-    }
-  end,
+require('lualine').setup {
+  options = {
+    section_separators = '',
+    component_separators = '',
+    theme = evil_theme,
+  },
+  sections = {
+    lualine_a = { evil_mode },
+    lualine_b = { evil_filetype, evil_filename },
+    lualine_c = { evil_lsp, evil_diagnostics },
+    lualine_x = { 'searchcount', evil_diff, evil_branch },
+    lualine_y = { evil_location },
+    lualine_z = {},
+  },
+  inactive_sections = {
+    lualine_a = { evil_mode },
+    lualine_b = { evil_filename },
+    lualine_c = {},
+    lualine_x = {},
+    lualine_y = {},
+    lualine_z = {},
+  },
 }
