@@ -622,7 +622,6 @@ do
     marksman = {},
     ruff = {},
     rust_analyzer = {},
-    stylua = {},
     taplo = {},
     tinymist = {
       settings = {
@@ -739,12 +738,16 @@ do
     },
     -- You can also specify external formatters in here.
     formatters_by_ft = {
-      -- rust = { 'rustfmt' },
-      -- Conform can also run multiple formatters sequentially
-      -- python = { "isort", "black" },
-      --
-      -- You can use 'stop_after_first' to run the first available formatter from the list
-      -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      lua = { 'stylua' },
+      go = { 'goimports', 'gofmt' },
+      rust = { 'rustfmt' },
+      sh = { 'shfmt' },
+      bash = { 'shfmt' },
+      zsh = { 'shfmt' },
+      markdown = { 'prettierd', 'prettier', stop_after_first = true },
+      yaml = { 'yamlfmt', 'prettierd', 'prettier', stop_after_first = true },
+      toml = { 'taplo' },
+      zig = { 'zigfmt' },
     },
   }
 
