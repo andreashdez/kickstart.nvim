@@ -3,6 +3,10 @@
 
 vim.loader.enable()
 
+-- External tools are installed with mise (see tools.toml); expose them regardless of how nvim was launched
+local mise_data = vim.env.MISE_DATA_DIR or ((vim.env.XDG_DATA_HOME or vim.fn.expand '~/.local/share') .. '/mise')
+vim.env.PATH = mise_data .. '/shims:' .. vim.env.PATH
+
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 

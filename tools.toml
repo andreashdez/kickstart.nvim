@@ -1,0 +1,37 @@
+# External tools used by this config (LSP servers, formatters, linters), installed with mise.
+# Not named mise.toml on purpose: link it into mise's global config so it applies everywhere:
+#   ln -s ~/.config/nvim/tools.toml ~/.config/mise/conf.d/nvim.toml && mise install
+# Rust tooling (rust-analyzer, rustfmt, clippy) comes from rustup to match the toolchain.
+
+[tools]
+# Runtimes needed by the go/npm/pypi backends below
+go = "latest"
+node = "lts"
+uv = "latest"
+# zls must match the zig version
+zig = "0.17.0"
+zls = "0.17.0"
+
+# LSP servers
+gleam = "latest"
+lua-language-server = "latest"
+marksman = "latest"
+ruff = "latest"
+taplo = "latest"
+tinymist = "latest"
+"go:golang.org/x/tools/gopls" = "latest"
+"npm:yaml-language-server" = "latest"
+
+# Formatters (conform)
+stylua = "latest"
+shfmt = "latest"
+yamlfmt = "latest"
+"go:golang.org/x/tools/cmd/goimports" = "latest"
+"npm:@fsouza/prettierd" = "latest"
+
+# Linters (nvim-lint)
+golangci-lint = "latest"
+markdownlint-cli2 = "latest"
+shellcheck = "latest"
+yamllint = "latest"
+"github:DonIsaac/zlint" = "latest"

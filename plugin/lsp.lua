@@ -1,8 +1,5 @@
 vim.pack.add {
   'https://github.com/neovim/nvim-lspconfig',
-  'https://github.com/mason-org/mason.nvim',
-  'https://github.com/mason-org/mason-lspconfig.nvim',
-  'https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim',
   'https://github.com/j-hui/fidget.nvim',
 }
 
@@ -38,28 +35,6 @@ local servers = {
     settings = { Lua = {} },
   },
 }
-
--- Servers that mason can't install (install them yourself)
-local not_in_mason = { gleam = true }
-
-local ensure_installed = vim.tbl_filter(function(server) return not not_in_mason[server] end, vim.tbl_keys(servers))
-vim.list_extend(ensure_installed, {
-  -- formatters (conform)
-  'stylua',
-  'goimports',
-  'prettierd',
-  'shfmt',
-  'yamlfmt',
-  -- linters (nvim-lint)
-  'golangci-lint',
-  'markdownlint-cli2',
-  'shellcheck',
-  'yamllint',
-})
-
-require('mason').setup {}
-require('mason-lspconfig').setup { automatic_enable = false }
-require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
 for name, server in pairs(servers) do
   vim.lsp.config(name, server)
