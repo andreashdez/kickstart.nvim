@@ -9,8 +9,8 @@ go = "latest"
 node = "lts"
 uv = "latest"
 # zls must match the zig version
-zig = "0.17.0"
-zls = "0.17.0"
+zig = "latest"
+zls = "latest"
 
 # LSP servers
 gleam = "latest"
